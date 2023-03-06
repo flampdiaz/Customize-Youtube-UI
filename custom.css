@@ -1,0 +1,13 @@
+#playlists.ytd-add-to-playlist-renderer {
+    display: grid;
+    gap: 5px 10px;
+    grid-template-columns: auto auto auto;
+}
+#playlists.ytd-add-to-playlist-renderer > ytd-playlist-add-to-option-renderer > #checkbox > #checkboxLabel {
+    padding-left: 3px;
+}
+#playlists.ytd-add-to-playlist-renderer > ytd-playlist-add-to-option-renderer > #checkbox {
+    background-color: #f2f2f2;
+    border: 5px solid #e9e9e9;
+}
+

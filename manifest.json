@@ -1,0 +1,16 @@
+{
+    "manifest_version": 2,
+    "name": "Youtube Customized",
+    "description": "Customizing Youtube for better UX",
+    "version": "1.0",
+    "author": "Flampeyeiry Diaz",
+    "content_scripts": [ 
+        {
+            "matches": [ "http://www.youtube.com/*", "https://www.youtube.com/*" ],
+            "js": ["custom.js"],
+            "css": ["custom.css"],
+            "run_at": "document_end"
+        } 
+    ]
+}
+
