@@ -15,7 +15,7 @@ function waitForElement(selector) {
     });
 }
 
-function moveSaveButton(saveButton){
+function drawSaveButton(saveButton){
     const likeButtonRenderer = document.getElementById('segmented-like-button');
     const menuRenderer = likeButtonRenderer.parentElement;
     const saveButtonShape = saveButton.parentElement;
@@ -37,35 +37,56 @@ function clickSaveButton(saveButton){
     });
 }
 
-function moveWatchLaterButton(saveButton){
-    const watchLaterPrivateButtonText_querySelector = 'yt-formatted-string[aria-label="Watch later Private"]';
+function drawPlayListButtons(saveButton){
+    const checklist_tags = [{"Watch later": null},{"Javascript": ["javascript", "React"]},{"Flutter": ["ASMR"]},{"Unity": ["Unity"]}, {"Programming": null}]
+    const likeButtonRenderer = document.getElementById('segmented-like-button');
+    const menuRenderer = likeButtonRenderer.parentElement;
+    const saveButtonRenderer = saveButton.parentElement.parentElement;
+    const videoTitle = document.querySelector("#title > h1 > yt-formatted-string").innerHTML;
 
-    waitForElement(watchLaterPrivateButtonText_querySelector).then((watchLaterPrivateButtonText) => {
-        const likeButtonRenderer = document.getElementById('segmented-like-button');
-        const menuRenderer = likeButtonRenderer.parentElement;
-        const watchLaterPlaylistOptionButton = watchLaterPrivateButtonText.parentElement.parentElement.parentElement.parentElement.parentElement;
-        const watchLaterLabel = watchLaterPrivateButtonText.parentElement.parentElement.parentElement;
+    let playlistQuerySelector = 'yt-formatted-string[aria-label="Watch later Private"]';
+    
+    waitForElement(playlistQuerySelector).then((watchLaterPrivateButtonText) => {
+        let checkListPrivateButtonText = watchLaterPrivateButtonText;
+        for (checklist of checklist_tags) {
+            const keyWords = Object.values(checklist);
+            const playlistName = Object.keys(checklist)[0];
+            playlistQuerySelector = `yt-formatted-string[aria-label="${playlistName} Private"]`;
+            if (checkListPrivateButtonText == null) {
+                checkListPrivateButtonText = document.querySelector(playlistQuerySelector);
+            }
+            
+            for (keyWord of keyWords){
+                if (keyWord == null){
+                    drawCheckListButton(checkListPrivateButtonText, saveButtonRenderer, menuRenderer);
+                    break;
+                }
+                if (keyWord.some((word) => videoTitle.toLowerCase().includes(word.toLowerCase()))){
+                    drawCheckListButton(checkListPrivateButtonText, saveButtonRenderer, menuRenderer);
+                    break;
+                }
+            }
 
-        const saveButtonShape = saveButton.parentElement;
-        const saveButtonRenderer = saveButtonShape.parentElement;
-
-        watchLaterLabel.style.paddingLeft = "0px";
-
-        menuRenderer.insertBefore(watchLaterPlaylistOptionButton, saveButtonRenderer);
+            checkListPrivateButtonText = null;
+        }
     });
 }
 
+function drawCheckListButton(checkListPrivateButtonText, saveButtonRenderer, menuRenderer){
+    const checklistPlaylistOptionButton = checkListPrivateButtonText.parentElement.parentElement.parentElement.parentElement.parentElement;
+    const checklistLabel = checkListPrivateButtonText.parentElement.parentElement.parentElement;
+
+    checklistLabel.style.paddingLeft = "0px";
+
+    menuRenderer.insertBefore(checklistPlaylistOptionButton, saveButtonRenderer);
+}
+
 window.addEventListener('load', () => {
-    console.log("RUNNING custom Youtube ----------------------------------------------------------");
-  
     const saveButton_querySelector = 'button[aria-label="Save to playlist"]';
 
     waitForElement(saveButton_querySelector).then((saveButton) => {
-        moveSaveButton(saveButton);
+        drawSaveButton(saveButton);
         clickSaveButton(saveButton);
-        moveWatchLaterButton(saveButton);
+        drawPlayListButtons(saveButton);
     });
 });
-  
-console.log("CUSTOM YOUTUBE JAVASCRIPT LOADED");
-  
